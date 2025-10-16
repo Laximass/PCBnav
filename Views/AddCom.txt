@@ -1,0 +1,22 @@
+﻿<Window x:Class="PCB_Nav3.AddCom"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PCB_Nav3"
+        mc:Ignorable="d"
+        Title="AddCom" Height="184" Width="327">
+    <Grid x:Name="AddComGrid" Background="{DynamicResource BGColour}">
+
+        <TextBox x:Name="PartNumComtb" Height="20" Margin="130,34,19,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{DynamicResource TextColour}"/>
+        <TextBox x:Name="CommentComtb" Height="20" Margin="130,67,19,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{DynamicResource TextColour}"/>
+
+        <Label x:Name="PartNumlbl" Content="Part number" HorizontalAlignment="Left" Height="20" Margin="19,34,0,0" VerticalAlignment="Top" Width="90" Foreground="{DynamicResource TextColour}" Background="White" FontWeight="Bold" Padding="7,0,0,0" ScrollViewer.CanContentScroll="True" BorderThickness="2,2,2,2" BorderBrush="#FF6A6A6A"/>
+        <Label x:Name="Commentlbl" Content="Job Title" HorizontalAlignment="Left" Height="20" Margin="19,67,0,0" VerticalAlignment="Top" Width="90" Foreground="{DynamicResource TextColour}" Background="White" FontWeight="Bold" Padding="5,0,0,0" BorderThickness="2,2,2,2" BorderBrush="#FF6A6A6A"/>
+
+        <Button x:Name="CreateNewComOKbtn" Content="OK" Height="26" Margin="29,113,0,0" VerticalAlignment="Top" Click="CreateNewComOKbtn_Click" HorizontalAlignment="Left" Width="102"/>
+        <Button x:Name="CreateNewComCANbtn" Content="Cancel" HorizontalAlignment="Right" Height="26" Margin="0,113,29,0" VerticalAlignment="Top" Width="102" Click="CreateNewComCANbtn_Click" />
+        <Label Content="Add Title to Job" HorizontalAlignment="Left" Width="120" FontWeight="Bold" Height="33" VerticalAlignment="Top" Margin="103,0,0,0"/>
+
+    </Grid>
+</Window>

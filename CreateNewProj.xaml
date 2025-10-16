@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:PCB_Nav3" x:Class="PCB_Nav3.CreateNewProj" mc:Ignorable="d" Title="CreateNewProj" Height="220" Width="320" MinWidth="320" MinHeight="217">
+  <Grid x:Name="CreateGrid" Background="{DynamicResource BGColour}" MinWidth="314" MinHeight="201">
+    <TextBox x:Name="ProjectNumtb" Margin="130,42,25,0" TextWrapping="Wrap" Foreground="{DynamicResource TextColour}" Height="20" VerticalAlignment="Top"/>
+    <TextBox x:Name="PartNumtb" Margin="130,76,25,0" TextWrapping="Wrap" Foreground="{DynamicResource TextColour}" Height="20" VerticalAlignment="Top" CharacterCasing="Upper"/>
+    <TextBox x:Name="Commenttb" Margin="130,112,25,0" TextWrapping="Wrap" Foreground="{DynamicResource TextColour}" Height="20" VerticalAlignment="Top"/>
+    <Label x:Name="ProjNumlbl" Content="Project Code" HorizontalAlignment="Left" Margin="19,38,0,0" Width="90" Foreground="{DynamicResource TextColour}" Background="White" FontWeight="Bold" BorderThickness="2,2,2,2" Padding="5,0,0,0" VerticalContentAlignment="Center" BorderBrush="#FF6A6A6A" Height="24" VerticalAlignment="Top"/>
+    <Label x:Name="PartNumlbl" Content="Part number" HorizontalAlignment="Left" Margin="19,74,0,0" Width="90" Foreground="{DynamicResource TextColour}" Background="White" FontWeight="Bold" Padding="5,0,0,0" VerticalContentAlignment="Center" BorderThickness="2,2,2,2" BorderBrush="#FF6A6A6A" Height="24" VerticalAlignment="Top"/>
+    <Label x:Name="Commentlbl" Content="Job Title" HorizontalAlignment="Left" Margin="19,110,0,0" Width="90" Foreground="{DynamicResource TextColour}" Background="White" FontWeight="Bold" VerticalContentAlignment="Center" Padding="5,0,0,0" BorderThickness="2,2,2,2" BorderBrush="#FF6A6A6A" Height="24" VerticalAlignment="Top"/>
+    <Button x:Name="CreateNewOKbtn" Content="OK" Margin="25,0,187,26" Click="CreateNewOKbtn_Click" Height="29" VerticalAlignment="Bottom"/>
+    <Button x:Name="CreateNewCANbtn" Content="Cancel" Margin="0,0,40,26" Click="CreateNewCANbtn_Click" Height="29" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="108"/>
+    <Label Content="Create New Project" Height="33" VerticalAlignment="Top" FontWeight="Bold" Margin="97,0,97,0" Padding="0,0,0,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+  </Grid>
+</Window>

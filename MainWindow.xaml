@@ -1,0 +1,189 @@
+<Window x:Class="PCB_Nav3.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PCB_Nav3"
+        mc:Ignorable="d"
+        Title="EDA &amp; PCB Software Navigator"  Height="565" Width="672" Closing="Window_Closing" SizeChanged="Window_SizeChanged" SizeToContent="Manual" ResizeMode="CanResizeWithGrip"  MinWidth="670" MinHeight="565">
+
+    <Window.Resources>
+
+        <!--Main Window righlcik menu-->
+        <ContextMenu x:Key="RCMenuItem" >
+            <MenuItem Header="Add Job Title" Click="AddJobTitle_Click"   />
+
+        </ContextMenu>
+        <!--Main Window Sliding Menu-->
+        <!--Opening-->
+        <Storyboard x:Key="OpenMenu">
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,10,-155,20" To="0,10,0,20" DecelerationRatio="0.9" Duration="0:0:0.5"/>
+        </Storyboard>
+
+        <!--Closing-->
+        <Storyboard x:Key="CloseMenu">
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,10,0,20" To="0,10,-155,20" DecelerationRatio="0.9" Duration="0:0:0.5"/>
+        </Storyboard>
+
+    </Window.Resources>
+
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo x:Name="taskBarItem"/>
+    </Window.TaskbarItemInfo>
+
+
+
+    <Grid x:Name="MainGrid" Background="{DynamicResource BGColour}" MouseRightButtonDown="MouseRightButtonDown">
+        <Menu x:Name="MenuBar" Height="30" VerticalAlignment="Top" MaxHeight="20" MinHeight="20">
+            <MenuItem Header="_File">
+
+                <MenuItem Header="Set Projects Folder" Click="SetProj_Click"/>
+                <MenuItem Header="Update Log" Click="Updatelog_Click"/>
+
+            </MenuItem>
+            <MenuItem Header="_Window">
+
+                <MenuItem Header="Edit visual Settings" Click="Colours_Click"/>
+            </MenuItem>
+            <MenuItem Header="_Help">
+
+                <MenuItem Header="Navigator Help Document" Click="MenuItemHelp_Click"/>
+            </MenuItem>
+            <TextBlock HorizontalAlignment="Right" Height="20" TextWrapping="Wrap" Text="        !This software is NOT supported by EDA! Contact AL138484 for any issues." VerticalAlignment="Top" Width="481" IsHitTestVisible="False" FontWeight="Bold"/>
+        </Menu>
+        <!--Main Window Sliding Menu-->
+        <StackPanel Panel.ZIndex="2" Name="PopinMenu" Orientation="Horizontal" Margin='0,25,-155,20' HorizontalAlignment="Right" Width="225">
+            <StackPanel Orientation="Vertical" >
+                <Grid Margin="0,0,0,0">
+                    <Button Content="Quick Links"        Command="{Binding ShowAdminCommand}"        Visibility="{Binding AdminButtonVisibility}"/>
+                </Grid>
+            </StackPanel>
+
+            <Border BorderBrush="#AF1719" BorderThickness="1" Width="151" Background="GhostWhite" FlowDirection="RightToLeft">
+                <Button Content="Close"  Command="{Binding CloseAdminCommand}"/>
+            </Border>
+
+            <Button x:Name="RotaBtn" Content="Checking Rota" HorizontalAlignment="Center" VerticalAlignment="Top" Panel.ZIndex="2" Margin="-147,45,149,0" Height="40" Width="143" VerticalContentAlignment="Center" Click="RotaBtn_Click"/>
+            <Button x:Name="NotesBtn" Content="Drawing Notes" HorizontalAlignment="Center" VerticalAlignment="Top" Panel.ZIndex="2" Margin="-292,90,149,0" Height="40" Width="143" VerticalContentAlignment="Center" Click="NotesBtn_Click"/>
+            <Button x:Name="ModShBtn" Content="Mod Sheets" HorizontalAlignment="Center" VerticalAlignment="Top" Panel.ZIndex="2" Margin="-292,135,149,0" Height="40" Width="143" VerticalContentAlignment="Center" Click="ModShBtn_Click"/>
+            <Button x:Name="MDDocBtnoc" Content="M Drawing Doc" HorizontalAlignment="Center" VerticalAlignment="Top" Panel.ZIndex="2" Margin="-292,180,149,0" Height="40" Width="143" VerticalContentAlignment="Center" Click="MDDocBtnoc_Click"/>
+            <Button x:Name="Btn5" Content="Button5" HorizontalAlignment="Center" VerticalAlignment="Top" Panel.ZIndex="2" Margin="-292,225,149,0" Height="40" Width="143" VerticalContentAlignment="Center"/>
+            <Button x:Name="Btn6" Content="Button6" HorizontalAlignment="Center" VerticalAlignment="Top" Panel.ZIndex="2" Margin="-292,270,149,0" Height="40" Width="143" VerticalContentAlignment="Center"/>
+            <Button x:Name="Btn7" Content="Button7" HorizontalAlignment="Center" VerticalAlignment="Top" Panel.ZIndex="2" Margin="-292,315,149,0" Height="40" Width="143" VerticalContentAlignment="Center"/>
+            <Button x:Name="Btn8" Content="Button8" HorizontalAlignment="Center" VerticalAlignment="Top" Panel.ZIndex="2" Margin="-292,360,149,0" Height="40" Width="143" VerticalContentAlignment="Center"/>
+            <Button x:Name="Btn9" Content="Button9" HorizontalAlignment="Center" VerticalAlignment="Top" Panel.ZIndex="2" Margin="-292,405,149,0" Height="40" Width="143" VerticalContentAlignment="Center"/>
+
+        </StackPanel>
+
+        <!--Main Window Tree view-->
+        <!---->
+        <TreeView x:Name="TRView" Width="auto" Margin="30,80,290,55" Background="#FFCCC4BB" BorderThickness="5,5,5,5" FontSize="16" Loaded="TreeView_Loaded"  SelectedItemChanged="TreeView_SelectedItemChanged" TreeViewItem.Collapsed="TRView_Collapsed" TreeViewItem.Expanded="TRView_Expanded" >
+            <TreeView.Resources>
+                <!-- override the system brushes standard highlight  -->
+                <SolidColorBrush  Opacity="0.5" x:Key="{x:Static SystemColors.HighlightBrushKey}"/>
+
+                <!-- Style overide the inactive selection  -->
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Opacity="0.5" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="White"/>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                </Style>
+
+            </TreeView.Resources>
+
+        </TreeView>
+
+
+        <!--Main Window Tab menus-->
+        <TabControl x:Name="TabPane" Margin="0,48,39,55" HorizontalAlignment="Right" Width="208">
+
+            <TabItem x:Name="Tab1" Header="Production" FontWeight="Bold">
+                <TabItem.Background>
+                    <LinearGradientBrush EndPoint="0,1">
+                        <GradientStop Color="#FFF0F0F0"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </LinearGradientBrush>
+                </TabItem.Background>
+                <Grid x:Name="ProductionGrid" Background="#FF7AB8B2">
+
+                    <Button x:Name="DFBtn" Height="24" Margin="8,37,8,0" VerticalAlignment="Top" Click="DFBtn_Click" Content="DF - PCB" FontWeight="Bold"/>
+                    <Button x:Name="DGBtn" Height="24" Margin="8,8,8,0" VerticalAlignment="Top" Click="DGBtn_Click" Content="DG - Schematic" FontWeight="Bold"/>
+                    <Button x:Name="DFMBtn" Height="24" Margin="8,66,8,0" VerticalAlignment="Top" Click="DFMBtn_Click" Content="DFM - Panel" FontWeight="Bold"/>
+                    <Button x:Name="PublishBtn" Height="24" Margin="8,95,8,0" VerticalAlignment="Top" Click="btnPublishOP_Click" Content="Publish Outputs" FontWeight="Bold"/>
+                    <Button x:Name="EDPMFBtn" Height="24" Margin="8,226,8,0" VerticalAlignment="Top" Padding="1,0.5,1,0.5" Click="EDPMFBtn_Click2" Content="Edit Parameter Files" FontWeight="Bold" />
+                    <Button x:Name="UTTCBtn" Height="24" Margin="8,153,8,0" VerticalAlignment="Top" Click="UTTCBtn_Click" Content="Teamcentre Upload" FontWeight="Bold"/>
+                    <Button x:Name="HelpNote_Btn" Height="24" Margin="8,313,8,0" VerticalAlignment="Top" Click="HelpNote_Btn_Click" Content="DF Help Notes" FontWeight="Bold" />
+                    <Button x:Name="ChkOPbtn" Height="24" VerticalAlignment="Top" Margin="8,124,8,0" Click="ChkOPbtn_Click" Content="Check Outputs" FontWeight="Bold"/>
+                    <Button x:Name="CreateNewProjbtn" Content="Create New Project" Height="24" Margin="8,197,8,0" VerticalAlignment="Top" IsDefault="True" Click="CreateNewProjbtn_Click" FontWeight="Bold"/>
+
+                    <GridSplitter HorizontalAlignment="Stretch" Height="2" Margin="10,188,10,0" VerticalAlignment="Top" Background="Black"/>
+
+                    <Button x:Name="RenameProjbtn" Content="Rename Project" Height="24" Margin="8,255,8,0" VerticalAlignment="Top" IsDefault="True" Click="RenameProjbtn_Click" FontWeight="Bold"/>
+                    <Button x:Name="RemovUPloadbtn" Content="Remove 'uploaded' From Name" Height="24" Margin="8,284,8,0" VerticalAlignment="Top" IsDefault="True" Click="RemovUPloadbtn_Click" FontWeight="Bold"/>
+                    <Button x:Name="ProPart_Btn" Height="24" Margin="8,342,8,0" VerticalAlignment="Top" Click="ProPart_Btn_Click" Content="ProPart Finder" FontWeight="Bold" />
+
+                </Grid>
+            </TabItem>
+
+            <TabItem x:Name="Tab2" Header="Prototype" FontWeight="Bold">
+                <Grid x:Name="ProtoGrid" Background="#FFEA6262">
+
+                    <Button x:Name="DFBtn2" Height="24" Margin="8,37,8,0" VerticalAlignment="Top" Click="DFBtn_Click" Content="DF - PCB" FontWeight="Bold"/>
+                    <Button x:Name="DGBtn2" Height="24" Margin="8,8,8,0" VerticalAlignment="Top" Click="DGBtn_Click" Content="DG - Schematic" FontWeight="Bold"/>
+                    <Button x:Name="DFMBtn2" Height="24" Margin="8,66,8,0" VerticalAlignment="Top" Click="DFMBtn_Click" Content="DFM - Panel" FontWeight="Bold"/>
+                    <Button x:Name="EDPMFBtn2" Height="24" Margin="8,226,8,0" VerticalAlignment="Top" Padding="1,0.5,1,0.5" Content="Edit Parameter Files" FontWeight="Bold" Click="EDPMFBtn_Click"/>
+                    <Button x:Name="UTTCBtn2" Height="22" Margin="8,124,8,0" VerticalAlignment="Top" Content="Teamcentre Upload" FontWeight="Bold" Click="UTTCBtn_Click"/>
+                    <Button x:Name="PubProtoOPBtn" Height="24" Margin="8,95,8,0" VerticalAlignment="Top" Click="btnPublishProtoOP_Click" Content="Publish Prototype Outputs" FontWeight="Bold"/>
+                    <Button x:Name="HelpBtn2" Height="24" Margin="8,313,8,0" VerticalAlignment="Top" Content="Help Notes" FontWeight="Bold" Click="HelpNote_Btn_Click"/>
+                    <Button x:Name="CreateNewProjbtn2" Content="Create New Project" Height="24" Margin="8,197,8,0" VerticalAlignment="Top" IsDefault="True" Click="CreateNewProjbtn_Click" FontWeight="Bold"/>
+
+                    <GridSplitter HorizontalAlignment="Stretch" Height="2" Margin="10,188,10,0" VerticalAlignment="Top" Background="Black"/>
+
+                    <Button x:Name="RenameProjbtn2" Content="Rename Project" Height="24" Margin="8,255,8,0" VerticalAlignment="Top" IsDefault="True" Click="RenameProjbtn_Click" FontWeight="Bold"/>
+                    <Button x:Name="RemovUPloadbtn2" Content="Remove 'uploaded' From Name" Height="24" Margin="8,284,8,0" VerticalAlignment="Top" IsDefault="True" Click="RemovUPloadbtn_Click" FontWeight="Bold"/>
+                    <Button x:Name="ProPart_Btn2" Height="24" Margin="8,342,8,0" VerticalAlignment="Top" Click="ProPart_Btn_Click" Content="ProPart Finder" FontWeight="Bold" />
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Folders" FontWeight="Bold">
+                <Grid x:Name="FoldersGrid" Background="#FFDBDC1D">
+
+                    <Button x:Name="PubFolbtn" Content="Publish Folder" Height="24" Margin="8,153,8,0" VerticalAlignment="Top" Click="PubFolbtn_Click"/>
+                    <Button x:Name="DFfolbtn" Content="DF Folder" Height="24" Margin="8,66,8,0" VerticalAlignment="Top" Click="DFfolbtn_Click"/>
+                    <Button x:Name="GerFolbtn" Content="Gerber Folder" Height="24" VerticalAlignment="Top" Margin="8,124,8,0" Click="GerFolbtn_Click"/>
+                    <Button x:Name="ScheFolbtn" Content="Schematic Folder" Height="24" VerticalAlignment="Top" Margin="8,37,8,0" Click="ScheFolbtn_Click"/>
+                    <Button x:Name="DocPCBbtn" Content="Docs PCB" Height="24" VerticalAlignment="Top" Margin="8,95,8,0" Click="DocPCBbtn_Click"/>
+                    <Button x:Name="JobFolbtn" Content="Job Folder" Height="24" Margin="8,8,8,0" VerticalAlignment="Top" Click="JobFolbtn_Click" />
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Conversion" FontWeight="Bold">
+                <Grid x:Name="ConversionGrid" Background="#FFF19F0A">
+
+                    <Button x:Name="BD_DF_Btn" Content="BD - DF Conversion" Height="24" Margin="8,66,8,0" VerticalAlignment="Top" Click="BD_DF_Btn_Click"/>
+                    <Button x:Name="SD_DG_Com_Btn" Content="Compare SD-DG Schematic" Height="24" VerticalAlignment="Top" Margin="8,37,8,0" Click="SD_DG_Com_Btn_Click"/>
+                    <Button x:Name="SD_DG_Btn" Content="SD - DG Conversion" Height="24" Margin="8,8,8,0" VerticalAlignment="Top" Click="SD_DG_Btn_Click" />
+
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <!--Main Window images-->
+        <Image x:Name="Logo" HorizontalAlignment="Left" Height="42" Margin="30,28,0,0" VerticalAlignment="Top" Width="258" Source="/images/renishawlogo.png"/>
+
+        <!--Main Window Lables-->
+        <Label x:Name="Versionlbl" Content="Label" HorizontalAlignment="Left" Height="32" Margin="30,0,0,20" VerticalAlignment="Bottom" Width="130" FontWeight="Bold" FontSize="14"/>
+
+        <!--Main Window Buttons-->
+        <Button x:Name="ResetViewBtn" Margin="306,0,0,16"  Content="Refresh View" FontWeight="Bold" Click="Reset_Click" Height="24" VerticalAlignment="Bottom" IsDefault="True" HorizontalAlignment="Left" Width="150" />
+        <Button x:Name="ClosetreeBtn" Margin="130,0,0,16"  Content="Collapse Tree" FontWeight="Bold" Click="ClosetreeBtn_Click" IsDefault="True" HorizontalAlignment="Left" Width="150" Height="24" VerticalAlignment="Bottom" />
+
+
+
+    </Grid>
+
+
+</Window>
